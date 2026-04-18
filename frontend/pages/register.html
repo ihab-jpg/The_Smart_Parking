@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking System - Register</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <h1>Smart Parking System</h1>
+            <h2>Create Account</h2>
+            
+            <form id="register-form" class="register-form">
+                <!-- Basic Info -->
+                <fieldset>
+                    <legend>Basic Information</legend>
+                    
+                    <div class="form-group">
+                        <label for="full-name">Full Name:</label>
+                        <input type="text" id="full-name" name="full_name" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" placeholder="Choose a username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    </div>
+                </fieldset>
+
+                <!-- Vehicle Info -->
+                <fieldset>
+                    <legend>Vehicle Information</legend>
+                    
+                    <div class="form-group">
+                        <label for="license-plate">License Plate:</label>
+                        <input type="text" id="license-plate" name="license_plate" placeholder="e.g., ABC-1234" required>
+                        <small>Used for accident contact facilitation</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="disability-status">
+                            <input type="checkbox" id="disability-status" name="is_disabled">
+                            I have disability (eligible for disabled parking)
+                        </label>
+                    </div>
+                </fieldset>
+
+                <!-- Preferences -->
+                <fieldset>
+                    <legend>Parking Preferences</legend>
+                    
+                    <div class="form-group">
+                        <label>Preferred Spot Location:</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="near_entrance" value="true"> Near Entrance</label>
+                            <label><input type="checkbox" name="near_elevator" value="true"> Near Elevator</label>
+                            <label><input type="checkbox" name="covered" value="true"> Covered Spot</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="proximity-preference">Proximity to Other Cars:</label>
+                        <select id="proximity-preference" name="proximity_preference">
+                            <option value="no-preference">No Preference</option>
+                            <option value="isolated">Prefer Isolated</option>
+                            <option value="close">Prefer Close to Others</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <!-- Password -->
+                <fieldset>
+                    <legend>Security</legend>
+                    
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                        <small>At least 8 characters, with uppercase, lowercase, and numbers</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">Confirm Password:</label>
+                        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password" required>
+                    </div>
+                </fieldset>
+
+                <!-- Terms & Conditions -->
+                <div class="form-group checkbox">
+                    <label>
+                        <input type="checkbox" id="terms" name="terms" required>
+                        I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn-primary">Create Account</button>
+
+                <p class="form-link">Already have an account? <a href="login.html">Login here</a></p>
+            </form>
+
+            <!-- Messages -->
+            <div id="error-message" class="message error"></div>
+            <div id="success-message" class="message success"></div>
+        </div>
+    </div>
+
+    <script src="../static/js/api.js"></script>
+    <script>
+        // TODO: Implement registration form submission
+        // - Validate all form inputs (password strength, email format, license plate, etc.)
+        // - Check password match
+        // - Verify terms acceptance
+        // - Call API /auth/register with all user data
+        // - Store JWT token in localStorage
+        // - Redirect to dashboard or email verification page
+
+        // TODO: Implement real-time form validation
+        // - Check username availability (AJAX)
+        // - Check email availability (AJAX)
+        // - Validate license plate format
+        // - Validate password strength display
+
+        // TODO: Implement error handling
+        // - Display validation errors next to form fields
+        // - Show API errors in error message div
+
+        // TODO: Implement preference serialization
+        // - Convert preference checkboxes to JSON format
+    </script>
+</body>
+</html>

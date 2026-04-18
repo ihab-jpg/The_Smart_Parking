@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking System - Login</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box">
+            <h1>Smart Parking System</h1>
+            <h2>Login</h2>
+            
+            <!-- Account Type Selection -->
+            <div class="account-type-selector">
+                <button id="user-login-btn" class="account-type-btn active">User Login</button>
+                <button id="admin-login-btn" class="account-type-btn">Admin Login</button>
+            </div>
+
+            <!-- User Login Form -->
+            <form id="user-login-form" class="login-form active">
+                <div class="form-group">
+                    <label for="user-email">Email or Username:</label>
+                    <input type="text" id="user-email" name="email" placeholder="Enter your email or username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="user-password">Password:</label>
+                    <input type="password" id="user-password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Login</button>
+
+                <p class="form-link">Don't have an account? <a href="register.html">Register here</a></p>
+                <p class="form-link"><a href="#">Forgot password?</a></p>
+            </form>
+
+            <!-- Admin Login Form -->
+            <form id="admin-login-form" class="login-form">
+                <div class="form-group">
+                    <label for="admin-email">Admin Email or Username:</label>
+                    <input type="text" id="admin-email" name="email" placeholder="Enter admin email or username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="admin-password">Password:</label>
+                    <input type="password" id="admin-password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Admin Login</button>
+            </form>
+
+            <!-- Messages -->
+            <div id="error-message" class="message error"></div>
+            <div id="success-message" class="message success"></div>
+        </div>
+    </div>
+
+    <script src="../static/js/api.js"></script>
+    <script>
+        // TODO: Implement user login form submission
+        // - Validate form inputs
+        // - Call API /auth/login with credentials
+        // - Store JWT token in localStorage
+        // - Redirect to dashboard/main page
+
+        // TODO: Implement admin login form submission
+        // - Validate form inputs
+        // - Call API /auth/admin-login with credentials
+        // - Store JWT token in localStorage
+        // - Redirect to admin dashboard
+
+        // TODO: Implement account type selector
+        // - Switch between user and admin login forms
+        // - Update button active state
+
+        // TODO: Implement error/success message display
+        // - Show error if login fails
+        // - Show success and redirect on successful login
+    </script>
+</body>
+</html>

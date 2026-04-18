@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Parking System - Admin Dashboard</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Navigation Bar -->
+        <nav class="admin-navbar">
+            <div class="nav-brand">Smart Parking Admin</div>
+            <div class="nav-items">
+                <span class="admin-name">Admin User</span>
+                <button id="admin-logout-btn" class="btn-secondary">Logout</button>
+            </div>
+        </nav>
+
+        <div class="admin-wrapper">
+            <!-- Sidebar Navigation -->
+            <aside class="admin-sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#dashboard" class="menu-item active" data-tab="dashboard">Dashboard</a></li>
+                    <li><a href="#users" class="menu-item" data-tab="users">Manage Users</a></li>
+                    <li><a href="#lots" class="menu-item" data-tab="lots">Manage Parking Lots</a></li>
+                    <li><a href="#spots" class="menu-item" data-tab="spots">Manage Spots</a></li>
+                    <li><a href="#reservations" class="menu-item" data-tab="reservations">Active Reservations</a></li>
+                    <li><a href="#payments" class="menu-item" data-tab="payments">Payments</a></li>
+                    <li><a href="#contact-requests" class="menu-item" data-tab="contact-requests">Contact Requests</a></li>
+                    <li><a href="#reports" class="menu-item" data-tab="reports">Reports</a></li>
+                    <li><a href="#settings" class="menu-item" data-tab="settings">Settings</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-content">
+
+                <!-- Dashboard Tab -->
+                <section id="dashboard-tab" class="tab-content active">
+                    <h1>Dashboard</h1>
+                    
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>Total Users</h3>
+                            <p id="stat-total-users" class="stat-value">—</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Active Reservations</h3>
+                            <p id="stat-active-reservations" class="stat-value">—</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Spots</h3>
+                            <p id="stat-total-spots" class="stat-value">—</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Occupied Spots</h3>
+                            <p id="stat-occupied-spots" class="stat-value">—</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Revenue (Today)</h3>
+                            <p id="stat-revenue-today" class="stat-value">—</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Revenue (Month)</h3>
+                            <p id="stat-revenue-month" class="stat-value">—</p>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity -->
+                    <div class="dashboard-section">
+                        <h2>Recent Activity</h2>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Event</th>
+                                    <th>User/Details</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-activity-list">
+                                <!-- TODO: Populate from API -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Users Tab -->
+                <section id="users-tab" class="tab-content">
+                    <h1>Manage Users</h1>
+                    
+                    <div class="section-controls">
+                        <input type="text" id="user-search" placeholder="Search users..." class="search-input">
+                        <button id="add-user-btn" class="btn-primary">Add New User</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>License Plate</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-list">
+                            <!-- TODO: Populate from API /admin/users -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Parking Lots Tab -->
+                <section id="lots-tab" class="tab-content">
+                    <h1>Manage Parking Lots</h1>
+                    
+                    <button id="add-lot-btn" class="btn-primary">Add New Parking Lot</button>
+
+                    <div class="lots-grid">
+                        <!-- TODO: Display lots as cards -->
+                    </div>
+                </section>
+
+                <!-- Parking Spots Tab -->
+                <section id="spots-tab" class="tab-content">
+                    <h1>Manage Parking Spots</h1>
+                    
+                    <div class="section-controls">
+                        <select id="lot-filter" class="filter-select">
+                            <option value="">Select lot...</option>
+                            <!-- TODO: Populate from API -->
+                        </select>
+                        <button id="add-spot-btn" class="btn-primary">Add New Spot</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Spot Number</th>
+                                <th>Lot</th>
+                                <th>Level</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="spots-list">
+                            <!-- TODO: Populate from API /admin/lots/<lot_id>/spots -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Active Reservations Tab -->
+                <section id="reservations-tab" class="tab-content">
+                    <h1>Active Reservations</h1>
+                    
+                    <div class="section-controls">
+                        <input type="date" id="reservation-date-filter" class="filter-input">
+                        <button id="refresh-reservations-btn" class="btn-secondary">Refresh</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Reservation ID</th>
+                                <th>User</th>
+                                <th>Spot</th>
+                                <th>Start Time</th>
+                                <th>Duration</th>
+                                <th>Cost So Far</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservations-list">
+                            <!-- TODO: Populate from API /admin/reservations -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Payments Tab -->
+                <section id="payments-tab" class="tab-content">
+                    <h1>Payment Records</h1>
+                    
+                    <div class="section-controls">
+                        <input type="date" id="payment-date-from" placeholder="From" class="filter-input">
+                        <input type="date" id="payment-date-to" placeholder="To" class="filter-input">
+                        <select id="payment-status-filter" class="filter-select">
+                            <option value="">All Statuses</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                        <button id="export-payments-btn" class="btn-secondary">Export</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>User</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Receipt</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payments-list">
+                            <!-- TODO: Populate from API /admin/payments -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Contact Requests Tab -->
+                <section id="contact-requests-tab" class="tab-content">
+                    <h1>Accident Contact Facilitation</h1>
+                    
+                    <div class="section-controls">
+                        <select id="contact-status-filter" class="filter-select">
+                            <option value="">All Statuses</option>
+                            <option value="open">Open</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                        <button id="new-contact-request-btn" class="btn-primary">New Contact Request</button>
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>User 1</th>
+                                <th>License Plate 1</th>
+                                <th>User 2</th>
+                                <th>License Plate 2</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contact-requests-list">
+                            <!-- TODO: Populate from API /admin/contact-requests -->
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Reports Tab -->
+                <section id="reports-tab" class="tab-content">
+                    <h1>Reports & Analytics</h1>
+                    
+                    <div class="reports-section">
+                        <h2>Generate Reports</h2>
+                        <div class="report-controls">
+                            <input type="date" id="report-date-from" placeholder="From" class="filter-input">
+                            <input type="date" id="report-date-to" placeholder="To" class="filter-input">
+                            <button id="parking-report-btn" class="btn-primary">Parking Report</button>
+                            <button id="revenue-report-btn" class="btn-primary">Revenue Report</button>
+                            <button id="export-users-btn" class="btn-secondary">Export Users (CSV)</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Tab -->
+                <section id="settings-tab" class="tab-content">
+                    <h1>Settings</h1>
+                    
+                    <div class="settings-group">
+                        <h2>Pricing Configuration</h2>
+                        <form id="pricing-form">
+                            <!-- TODO: Add hourly rate settings per lot -->
+                        </form>
+                    </div>
+
+                    <div class="settings-group">
+                        <h2>SMS Alerts Configuration</h2>
+                        <form id="sms-config-form">
+                            <!-- TODO: Add SMS alert type toggles -->
+                        </form>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="generic-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modal-body">
+                <!-- TODO: Dynamic modal content -->
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/api.js"></script>
+    <script src="../static/js/admin.js"></script>
+    <script>
+        // TODO: Initialize admin dashboard
+        // - Load dashboard statistics
+        // - Set up tab navigation
+        // - Load all admin data tables
+
+        // TODO: Implement tab switching
+        // - Show/hide tab content
+        // - Load data for each tab on click
+
+        // TODO: Implement user management
+        // - Fetch users: GET /admin/users
+        // - Search users (client-side or server)
+        // - Suspend/activate user: PUT /admin/users/<user_id>/status
+        // - View user details modal
+
+        // TODO: Implement lot management
+        // - Fetch lots: GET /admin/lots
+        // - Create lot: POST /admin/lots
+        // - Edit lot: PUT /admin/lots/<lot_id>
+        // - Delete lot: DELETE /admin/lots/<lot_id>
+
+        // TODO: Implement spot management
+        // - Fetch spots: GET /admin/lots/<lot_id>/spots
+        // - Create spot: POST /admin/lots/<lot_id>/spots
+        // - Edit spot: PUT /admin/spots/<spot_id>
+        // - Delete spot: DELETE /admin/spots/<spot_id>
+        // - Manage disabled spots
+
+        // TODO: Implement reservations monitoring
+        // - Fetch active reservations: GET /admin/reservations
+        // - Extend reservation: POST /admin/reservations/<res_id>/extend
+        // - Force release: POST /admin/reservations/<res_id>/force-release
+
+        // TODO: Implement payment management
+        // - Fetch payments: GET /admin/payments
+        // - Process refund: POST /admin/payments/<payment_id>/refund
+        // - Export payments
+
+        // TODO: Implement contact request facilitation
+        // - Fetch contact requests: GET /admin/contact-requests
+        // - Share contact info: POST /admin/contact-requests/<request_id>/share
+        // - Resolve request: PUT /admin/contact-requests/<request_id>/resolve
+
+        // TODO: Implement reports generation
+        // - Generate parking report: GET /admin/reports/parking
+        // - Generate revenue report: GET /admin/reports/revenue
+        // - Export CSV files
+
+        // TODO: Implement logout
+    </script>
+</body>
+</html>

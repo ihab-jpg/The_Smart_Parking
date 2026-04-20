@@ -51,6 +51,11 @@ public class AuthService {
             throw new IllegalArgumentException("Email already exists");
         }
 
+        // Check if license plate already exists
+        if (userRepository.existsByLicensePlate(request.getLicensePlate())) {
+            throw new IllegalArgumentException("License plate already exists");
+        }
+
         // Create new user
         User user = new User();
         user.setUsername(request.getUsername());

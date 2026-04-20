@@ -4,6 +4,7 @@ import com.smartparking.dto.LoginRequest;
 import com.smartparking.dto.LoginResponse;
 import com.smartparking.dto.RegisterRequest;
 import com.smartparking.dto.UserProfileResponse;
+import com.smartparking.dto.UpdateProfileRequest;
 import com.smartparking.model.User;
 import com.smartparking.service.AuthService;
 import com.smartparking.util.JwtUtils;
@@ -97,7 +98,7 @@ public class AuthController {
     @PutMapping("/profile")
     public ResponseEntity<?> updateProfile(
             @RequestHeader("Authorization") String token,
-            @RequestBody RegisterRequest request) {
+            @RequestBody UpdateProfileRequest request) {
         try {
             String cleanToken = token.replace("Bearer ", "");
             Long userId = jwtUtils.extractUserId(cleanToken);

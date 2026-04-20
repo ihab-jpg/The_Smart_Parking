@@ -2,6 +2,7 @@ package com.smartparking.service;
 
 import com.smartparking.dto.LoginRequest;
 import com.smartparking.dto.RegisterRequest;
+import com.smartparking.dto.UpdateProfileRequest;
 import com.smartparking.model.User;
 import com.smartparking.repository.UserRepository;
 import com.smartparking.util.PasswordUtils;
@@ -96,13 +97,19 @@ public class AuthService {
     /**
      * Update user profile
      */
-    public User updateUserProfile(Long userId, RegisterRequest request) {
+    public User updateUserProfile(Long userId, UpdateProfileRequest request) {
         User user = getUserById(userId);
 
         if (request.getFullName() != null) {
+            if(request.getFullName().isBlank()) {
+                throw new IllegalArgumentException("Please enter a valid full name.");
+            }
             user.setFullName(request.getFullName());
         }
         if (request.getPhoneNumber() != null) {
+            if(!ValidationUtils.isValidPhoneNumber(request.getPhoneNumber())) {
+                throw new IllegalArgumentException("Please enter a valid phone number.");
+            }
             user.setPhoneNumber(request.getPhoneNumber());
         }
         if (request.getPreferences() != null) {

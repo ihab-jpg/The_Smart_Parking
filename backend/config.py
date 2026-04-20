@@ -24,11 +24,11 @@ class Config:
     """
     
     # Database
-    SQLALCHEMY_DATABASE_URI = None  # TODO: Set MySQL connection string
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'mysql+pymysql://root:password@localhost/smart_parking')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Authentication
-    SECRET_KEY = None  # TODO: Set secret key
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
     PERMANENT_SESSION_LIFETIME = timedelta(hours=24)
     
     # Twilio (SMS)

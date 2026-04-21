@@ -44,17 +44,21 @@ public class AuthService {
 
         // Check if username already exists
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new IllegalArgumentException("Username already exists.");
         }
 
         // Check if email already exists
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new IllegalArgumentException("Email already exists.");
         }
 
         // Check if license plate already exists
         if (userRepository.existsByLicensePlate(request.getLicensePlate())) {
-            throw new IllegalArgumentException("License plate already exists");
+            throw new IllegalArgumentException("License plate already exists.");
+        }
+        // Check if phone number already exists
+        if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
+            throw new IllegalArgumentException("Phone number already exists.");
         }
 
         // Create new user

@@ -42,7 +42,7 @@ public class User {
     private String licensePlate;
     
     @Column(nullable = false)
-    private Boolean isDisabled = false;
+    private Boolean hasDisability = false;
     
     @Column(columnDefinition = "JSON")
     private Map<String, Object> preferences; // {near_entrance, proximity_preference, etc.}

@@ -75,7 +75,7 @@ public class AuthController {
     /**
      * Get current user profile
      * GET /auth/profile (protected)
-     * Returns: {user_id, username, email, full_name, license_plate, preferences, is_disabled}
+     * Returns: {user_id, username, email, full_name, license_plate, preferences, has_disability}
      */
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(@RequestHeader("Authorization") String token) {
@@ -92,7 +92,7 @@ public class AuthController {
     /**
      * Update user profile
      * PUT /auth/profile (protected)
-     * Payload: {full_name, phone_number, preferences, is_disabled}
+     * Payload: {full_name, phone_number, preferences, has_disabilityd}
      * Returns: {updated_user}
      */
     @PutMapping("/profile")

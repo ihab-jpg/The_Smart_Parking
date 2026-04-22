@@ -7,8 +7,12 @@ import com.smartparking.model.User;
 import com.smartparking.repository.UserRepository;
 import com.smartparking.util.PasswordUtils;
 import com.smartparking.util.ValidationUtils;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
+
+import jakarta.validation.constraints.Null;
 
 /**
  * Authentication Service
@@ -60,7 +64,24 @@ public class AuthService {
         if (userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new IllegalArgumentException("Phone number already exists.");
         }
-
+        // Check if username is valid
+        if (request.getUsername() != null) {
+            if(request.getUsername().isBlank()) {
+                throw new IllegalArgumentException("Please enter a valid user name.");
+            }
+        }
+        // Check if name is valid
+        if(request.getFullName()!= null){
+            if(request.getFullName().isBlank()) {
+                throw new IllegalArgumentException("Please enter a valid full name.");
+            }
+        }
+        // Check if phone number is valid
+        if (request.getPhoneNumber() != null) {
+            if(!ValidationUtils.isValidPhoneNumber(request.getPhoneNumber())) {
+                throw new IllegalArgumentException("Please enter a valid phone number.");
+            }
+        }
         // Create new user
         User user = new User();
         user.setUsername(request.getUsername());
@@ -69,7 +90,7 @@ public class AuthService {
         user.setFullName(request.getFullName());
         user.setPhoneNumber(request.getPhoneNumber());
         user.setLicensePlate(request.getLicensePlate());
-        user.setIsDisabled(false);
+        user.setHasDisability(false);
         user.setPreferences(request.getPreferences());
 
         return userRepository.save(user);
@@ -113,6 +134,9 @@ public class AuthService {
         if (request.getPhoneNumber() != null) {
             if(!ValidationUtils.isValidPhoneNumber(request.getPhoneNumber())) {
                 throw new IllegalArgumentException("Please enter a valid phone number.");
+            }
+            if(!request.getPhoneNumber().equals(user.getPhoneNumber()) && userRepository.existsByPhoneNumber(request.getPhoneNumber())){
+                throw new IllegalArgumentException("Phone number already exists.");
             }
             user.setPhoneNumber(request.getPhoneNumber());
         }

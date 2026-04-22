@@ -20,7 +20,7 @@ public class UserProfileResponse {
     private String licensePlate;
     private String phoneNumber;
     private Map<String, Object> preferences;
-    private Boolean isDisabled;
+    private Boolean hasDisability;
 
     public UserProfileResponse(User user) {
         this.userId = user.getId();
@@ -30,6 +30,6 @@ public class UserProfileResponse {
         this.licensePlate = user.getLicensePlate();
         this.phoneNumber = user.getPhoneNumber();
         this.preferences = user.getPreferences();
-        this.isDisabled = user.getIsDisabled();
+        this.hasDisability = user.getHasDisability();
     }
 }

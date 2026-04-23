@@ -1,5 +1,6 @@
 import { STATUS_STYLES, buildMapLanes } from '../utils/parking';
 
+<<<<<<< HEAD
 const REMOVED_SPOT_NUMBERS = new Set([1, 2, 3, 46, 47, 48, 153, 154, 155, 198, 199, 200]);
 const ROAD_SURFACE =
   'border border-brand-100/80 bg-gradient-to-b from-white via-[#fbfcfa] to-[#f4f7f2] shadow-inner';
@@ -45,10 +46,34 @@ function HorizontalCirculationBand({ compact = false }) {
   return (
     <div className="flex justify-center">
       <div className={`${bandWidth} ${bandHeight} rounded-full ${ROAD_SURFACE}`} />
+=======
+function SpotCell({ spot, onSpotClick, align = 'center' }) {
+  if (!spot) {
+    return (
+      <div className="h-5 w-[74px] rounded-md border border-dashed border-neutral-200 bg-white/70" />
+    );
+  }
+
+  const style = STATUS_STYLES[spot.status] || STATUS_STYLES.available;
+  const justify =
+    align === 'start' ? 'justify-start' : align === 'end' ? 'justify-end' : 'justify-center';
+
+  return (
+    <div className={`flex ${justify}`}>
+      <button
+        type="button"
+        onClick={() => onSpotClick(spot)}
+        title={`${spot.label} - ${spot.status}`}
+        className={`flex h-5 w-[74px] items-center justify-center rounded-md border px-1 text-[7px] font-bold tracking-[0.03em] shadow-sm transition hover:scale-[1.02] hover:shadow-soft ${style.card}`}
+      >
+        {spot.label}
+      </button>
+>>>>>>> dd17e67 (Update frontend parking system UI)
     </div>
   );
 }
 
+<<<<<<< HEAD
 function AisleColumn() {
   const radiusClass = 'rounded-[32px]';
 
@@ -71,12 +96,24 @@ function VerticalSpotRow({ spots, filteredSpotIds, onSpotClick }) {
           isActive={filteredSpotIds.has(spot.id)}
           onSpotClick={onSpotClick}
           orientation="vertical"
+=======
+function LaneColumn({ spots, onSpotClick, align }) {
+  return (
+    <div className="relative z-10 flex flex-col gap-1">
+      {spots.map((spot, index) => (
+        <SpotCell
+          key={spot ? spot.id : `empty-${index}`}
+          spot={spot}
+          onSpotClick={onSpotClick}
+          align={align}
+>>>>>>> dd17e67 (Update frontend parking system UI)
         />
       ))}
     </div>
   );
 }
 
+<<<<<<< HEAD
 function LaneColumn({ spots, filteredSpotIds, onSpotClick, align }) {
   const justify =
     align === 'start' ? 'items-start' : align === 'end' ? 'items-end' : 'items-center';
@@ -93,10 +130,22 @@ function LaneColumn({ spots, filteredSpotIds, onSpotClick, align }) {
           />
         ))}
       </div>
+=======
+function AisleColumn({ variant = 'side' }) {
+  const widthClass = variant === 'center' ? 'w-[58px] lg:w-[64px]' : 'w-4';
+  const radiusClass = variant === 'center' ? 'rounded-[28px]' : 'rounded-full';
+
+  return (
+    <div className="flex justify-center self-stretch">
+      <div
+        className={`${widthClass} ${radiusClass} min-h-[1196px] border border-brand-100 bg-white`}
+      />
+>>>>>>> dd17e67 (Update frontend parking system UI)
     </div>
   );
 }
 
+<<<<<<< HEAD
 function splitLaneSections(lane) {
   return {
     top: lane.spots.slice(0, 5),
@@ -222,6 +271,54 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
             </div>
           </div>
 
+=======
+export default function ParkingMap2D({ level, spots, onSpotClick }) {
+  const lanes = buildMapLanes(spots, 4, 50);
+
+  return (
+    <div className="rounded-[22px] border border-neutral-200 bg-neutral-50 p-3 lg:p-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm font-semibold text-neutral-900">{level} parking map</p>
+        <span className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-neutral-500 shadow-soft">
+          Tap any spot to inspect details
+        </span>
+      </div>
+
+      <div className="rounded-[22px] border border-neutral-200 bg-white p-3 shadow-soft lg:p-4">
+        <div className="rounded-[22px] border border-dashed border-brand-200 bg-[#fafcf9] p-3 lg:p-4">
+          <div className="mx-auto w-fit">
+            <div className="mb-5 flex justify-center">
+              <div className="rounded-full border border-brand-200 bg-white px-8 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-700 shadow-soft">
+                Vehicle Circulation Zone
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[78px_18px_78px_64px_78px_18px_78px] items-start gap-x-3">
+              <LaneColumn spots={lanes[0].spots} onSpotClick={onSpotClick} align="end" />
+              <AisleColumn />
+              <LaneColumn spots={lanes[1].spots} onSpotClick={onSpotClick} align="start" />
+              <AisleColumn variant="center" />
+              <LaneColumn spots={lanes[2].spots} onSpotClick={onSpotClick} align="start" />
+              <AisleColumn />
+              <LaneColumn spots={lanes[3].spots} onSpotClick={onSpotClick} align="end" />
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2 text-[11px] font-semibold">
+            <span className="rounded-full bg-white px-3 py-1.5 text-emerald-700 shadow-soft">
+              Available
+            </span>
+            <span className="rounded-full bg-white px-3 py-1.5 text-rose-700 shadow-soft">
+              Occupied
+            </span>
+            <span className="rounded-full bg-white px-3 py-1.5 text-amber-700 shadow-soft">
+              Under Maintenance
+            </span>
+            <span className="rounded-full bg-white px-3 py-1.5 text-slate-700 shadow-soft">
+              Suspended
+            </span>
+          </div>
+>>>>>>> dd17e67 (Update frontend parking system UI)
         </div>
       </div>
     </div>

@@ -3,19 +3,11 @@ export const parkingLevels = ['L1', 'L2', 'L3', 'L4', 'L5'];
 export const levelCapacity = 200;
 
 const levelConfigurations = {
-<<<<<<< HEAD
   L1: { prefix: 'A', available: 98, occupied: 68, reserved: 22, suspended: 12 },
   L2: { prefix: 'B', available: 76, occupied: 91, reserved: 21, suspended: 12 },
   L3: { prefix: 'C', available: 110, occupied: 58, reserved: 20, suspended: 12 },
   L4: { prefix: 'D', available: 84, occupied: 84, reserved: 20, suspended: 12 },
   L5: { prefix: 'E', available: 92, occupied: 76, reserved: 20, suspended: 12 },
-=======
-  L1: { prefix: 'A', available: 96, occupied: 68, reserved: 22, suspended: 14 },
-  L2: { prefix: 'B', available: 74, occupied: 91, reserved: 21, suspended: 14 },
-  L3: { prefix: 'C', available: 108, occupied: 58, reserved: 20, suspended: 14 },
-  L4: { prefix: 'D', available: 82, occupied: 84, reserved: 20, suspended: 14 },
-  L5: { prefix: 'E', available: 90, occupied: 76, reserved: 20, suspended: 14 },
->>>>>>> dd17e67 (Update frontend parking system UI)
 };
 
 const reservedAssignments = [
@@ -30,7 +22,6 @@ const reservedAssignments = [
 
 const suspendedAssignments = ['Maintenance', 'Sensors Upgrade', 'Lighting Fix', 'Painting'];
 const spotTypes = ['Student', 'Faculty', 'Official', 'EV', 'Accessible'];
-<<<<<<< HEAD
 const accessibleSpotNumbers = new Set([
   4,
   5,
@@ -45,8 +36,6 @@ const accessibleSpotNumbers = new Set([
   176,
   177,
 ]);
-=======
->>>>>>> dd17e67 (Update frontend parking system UI)
 
 function buildLevelSpots(level, configuration) {
   const statuses = [
@@ -78,7 +67,6 @@ function buildLevelSpots(level, configuration) {
 }
 
 export const parkingSpots = parkingLevels.flatMap((level) =>
-<<<<<<< HEAD
   buildLevelSpots(level, levelConfigurations[level]).map((spot) => {
     const spotNumber = Number(spot.label.split('-')[1]);
 
@@ -101,19 +89,12 @@ export const parkingSpots = parkingLevels.flatMap((level) =>
 
     return spot;
   }),
-=======
-  buildLevelSpots(level, levelConfigurations[level]),
->>>>>>> dd17e67 (Update frontend parking system UI)
 );
 
 export const recentActivity = [
   { id: 1, time: '08:10', label: 'A-03 reserved for Dean Office', tone: 'reserved' },
   { id: 2, time: '09:05', label: 'B-22 marked occupied by gate sensor', tone: 'occupied' },
-<<<<<<< HEAD
   { id: 3, time: '10:15', label: 'A-173 marked for accessible parking', tone: 'suspended' },
-=======
-  { id: 3, time: '10:15', label: 'C-48 suspended for sensors upgrade', tone: 'suspended' },
->>>>>>> dd17e67 (Update frontend parking system UI)
   { id: 4, time: '11:25', label: 'L4 availability updated to 40%', tone: 'available' },
 ];
 

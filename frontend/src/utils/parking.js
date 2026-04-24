@@ -1,10 +1,7 @@
 import { levelCapacity, parkingLevels } from '../data/mockParkingData';
 
-<<<<<<< HEAD
 const REMOVED_SPOT_NUMBERS = new Set([1, 2, 3, 46, 47, 48, 153, 154, 155, 198, 199, 200]);
 
-=======
->>>>>>> dd17e67 (Update frontend parking system UI)
 export const STATUS_STYLES = {
   available: {
     badge: 'border border-emerald-200 bg-emerald-50 text-emerald-700',
@@ -34,11 +31,7 @@ export function getStatusLabel(status) {
   }
 
   if (status === 'suspended') {
-<<<<<<< HEAD
     return 'Accessible Parking';
-=======
-    return 'Suspended';
->>>>>>> dd17e67 (Update frontend parking system UI)
   }
 
   if (status === 'occupied') {
@@ -56,7 +49,6 @@ export function groupSpotsByLevel(spots) {
   }, {});
 }
 
-<<<<<<< HEAD
 function getSpotNumber(spot) {
   const parts = spot.label.split('-');
   return Number(parts[1]);
@@ -69,10 +61,6 @@ function isVisibleOperationalSpot(spot) {
 export function buildDashboardMetrics(spots) {
   const visibleSpots = spots.filter(isVisibleOperationalSpot);
   const counts = visibleSpots.reduce(
-=======
-export function buildDashboardMetrics(spots) {
-  const counts = spots.reduce(
->>>>>>> dd17e67 (Update frontend parking system UI)
     (accumulator, spot) => {
       accumulator.total += 1;
       accumulator[spot.status] += 1;
@@ -88,50 +76,29 @@ export function buildDashboardMetrics(spots) {
   );
 
   return [
-<<<<<<< HEAD
     { label: 'Available Now', value: counts.available, accent: 'bg-brand-600', detail: 'Open for immediate access' },
     { label: 'Occupied', value: counts.occupied, accent: 'bg-rose-600', detail: 'Currently in active use' },
     { label: 'Under Maintenance', value: counts.reserved, accent: 'bg-amber-500', detail: 'Temporarily unavailable for use' },
     { label: 'Accessible Parking', value: counts.suspended, accent: 'bg-slate-500', detail: 'Designated accessible spaces' },
-=======
-    { label: 'Total Spots', value: parkingLevels.length * levelCapacity, accent: 'bg-neutral-900', detail: 'Across all underground levels' },
-    { label: 'Available Now', value: counts.available, accent: 'bg-brand-600', detail: 'Open for immediate access' },
-    { label: 'Occupied', value: counts.occupied, accent: 'bg-rose-600', detail: 'Currently in active use' },
-    { label: 'Under Maintenance', value: counts.reserved, accent: 'bg-amber-500', detail: 'Temporarily unavailable for use' },
->>>>>>> dd17e67 (Update frontend parking system UI)
   ];
 }
 
 export function getLevelSummary(spots, level) {
-<<<<<<< HEAD
   const levelSpots = spots.filter((spot) => spot.level === level && isVisibleOperationalSpot(spot));
-=======
-  const levelSpots = spots.filter((spot) => spot.level === level);
->>>>>>> dd17e67 (Update frontend parking system UI)
   const available = levelSpots.filter((spot) => spot.status === 'available').length;
   const occupied = levelSpots.filter((spot) => spot.status === 'occupied').length;
   const reserved = levelSpots.filter((spot) => spot.status === 'reserved').length;
   const suspended = levelSpots.filter((spot) => spot.status === 'suspended').length;
-<<<<<<< HEAD
   const total = levelSpots.length || levelCapacity;
   const availableRate = Math.round((available / total) * 100);
   return {
     total,
-=======
-  const availableRate = Math.round((available / levelCapacity) * 100);
-  return {
-    total: levelCapacity,
->>>>>>> dd17e67 (Update frontend parking system UI)
     available,
     occupied,
     reserved,
     suspended,
     availableRate,
-<<<<<<< HEAD
     fillRate: Math.round((occupied / total) * 100),
-=======
-    fillRate: Math.round((occupied / levelCapacity) * 100),
->>>>>>> dd17e67 (Update frontend parking system UI)
   };
 }
 
@@ -148,7 +115,6 @@ export function buildMapLanes(spots, laneCount = 4, laneSize = 50) {
     spots: normalizedSpots.slice(index * laneSize, index * laneSize + laneSize),
   }));
 }
-<<<<<<< HEAD
 
 const ENTRANCE_RANGES = {
   fountain: [
@@ -262,5 +228,3 @@ export function getFilteredSpotIds(spots, level, filters) {
 
   return new Set(sortBySpotNumber(result).map((spot) => spot.id));
 }
-=======
->>>>>>> dd17e67 (Update frontend parking system UI)

@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import Badge from './ui/Badge';
 import Button from './ui/Button';
-<<<<<<< HEAD
 import { getStatusLabel } from '../utils/parking';
-=======
->>>>>>> dd17e67 (Update frontend parking system UI)
 
 const nextStatuses = ['available', 'occupied', 'reserved', 'suspended'];
 
@@ -77,11 +74,7 @@ export default function SpotDetailsModal({
                         : 'border-neutral-200 bg-neutral-50 text-neutral-700 hover:border-brand-200 hover:bg-brand-50'
                     }`}
                   >
-<<<<<<< HEAD
                     {getStatusLabel(status)}
-=======
-                    {status}
->>>>>>> dd17e67 (Update frontend parking system UI)
                   </button>
                 ))}
               </div>

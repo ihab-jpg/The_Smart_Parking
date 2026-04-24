@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const entranceOptions = [
   {
     value: 'fountain',
@@ -84,33 +83,6 @@ export default function Sidebar({
   return (
     <aside className="space-y-5">
       <div className="surface-card rounded-[28px] p-5">
-=======
-const navItems = {
-  ADMIN: ['Operations overview', 'Official assignments', 'Maintenance control', 'Level management'],
-  USER: ['Live parking map', 'Spot details', 'Campus arrival', 'Quick navigation'],
-};
-
-export default function Sidebar({ role, activeLevel, levels, onLevelChange }) {
-  return (
-    <aside className="space-y-5">
-      <div className="surface-card rounded-[28px] p-5">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-700">
-          {role === 'ADMIN' ? 'Admin workspace' : 'User workspace'}
-        </p>
-        <div className="mt-4 space-y-2">
-          {navItems[role].map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-700"
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="surface-card rounded-[28px] p-5">
->>>>>>> dd17e67 (Update frontend parking system UI)
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-neutral-500">
@@ -144,7 +116,6 @@ export default function Sidebar({ role, activeLevel, levels, onLevelChange }) {
       </div>
 
       <div className="surface-card rounded-[28px] p-5">
-<<<<<<< HEAD
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.24em] text-neutral-500">
@@ -243,16 +214,6 @@ export default function Sidebar({ role, activeLevel, levels, onLevelChange }) {
             Clear filters
           </button>
         </div>
-=======
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-neutral-500">
-          Campus note
-        </p>
-        <p className="mt-3 text-sm leading-6 text-neutral-600">
-          {role === 'ADMIN'
-            ? 'Use this panel to switch levels quickly while reviewing assignments, occupancy, and maintenance changes.'
-            : 'Choose a level to explore current availability and inspect spot details across campus.'}
-        </p>
->>>>>>> dd17e67 (Update frontend parking system UI)
       </div>
     </aside>
   );

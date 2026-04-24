@@ -2,11 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import beirutFountain from '../assets/beirutFountain.jpg';
 import fountain from '../assets/fountain.jpeg';
-<<<<<<< HEAD
 import lauLogo from '../assets/LAU_LOGO.jpg';
-=======
-import lauLogo from '../assets/lau-logo.svg';
->>>>>>> dd17e67 (Update frontend parking system UI)
 import RoleToggleCard from '../components/RoleToggleCard';
 import Button from '../components/ui/Button';
 import { useAuth } from '../hooks/useAuth';
@@ -46,45 +42,20 @@ export default function LoginPage() {
     <main className="app-shell min-h-screen px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
         <header className="mb-8 flex flex-col justify-between gap-6 rounded-[28px] border border-neutral-200 bg-white px-6 py-5 shadow-soft lg:flex-row lg:items-center">
-<<<<<<< HEAD
           <div className="flex items-center gap-5">
             <div className="flex h-[96px] w-[170px] items-center justify-center">
               <img src={lauLogo} alt="LAU" className="h-full w-full object-contain" />
             </div>
             <div className="flex min-h-[96px] items-center">
               <h1 className="font-display text-[3.15rem] font-semibold leading-none text-[#006D58]">
-=======
-          <div className="flex items-center gap-4">
-            <div className="rounded-2xl border border-neutral-200 bg-white p-2 shadow-soft">
-              <img src={lauLogo} alt="LAU" className="h-14 w-auto" />
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-brand-700">
-                Lebanese American University
-              </p>
-              <h1 className="font-display text-3xl font-semibold text-neutral-900">
->>>>>>> dd17e67 (Update frontend parking system UI)
                 Parking System
               </h1>
             </div>
           </div>
-<<<<<<< HEAD
           <div className="flex max-w-xl items-center justify-center text-center">
             <p className="font-display text-lg font-semibold italic leading-snug text-[#006D58] lg:text-[1.5rem]">
               "Innovating, Empowering, Ever-Giving"
             </p>
-=======
-          <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-600">
-            <span className="rounded-full bg-brand-50 px-4 py-2 font-semibold text-brand-700">
-              Student-friendly
-            </span>
-            <span className="rounded-full bg-neutral-50 px-4 py-2 font-semibold">
-              Spring Boot ready
-            </span>
-            <span className="rounded-full bg-neutral-50 px-4 py-2 font-semibold">
-              Frontend demo
-            </span>
->>>>>>> dd17e67 (Update frontend parking system UI)
           </div>
         </header>
 
@@ -97,10 +68,6 @@ export default function LoginPage() {
               <div className="absolute inset-0 bg-white/58" />
               <div className="absolute inset-0 bg-gradient-to-r from-[#fffaf2]/90 via-[#fffaf2]/76 to-white/52" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#f7efe2]/42 to-transparent" />
-<<<<<<< HEAD
-=======
-              <div className="absolute inset-0 border-b-4 border-brand-500/35" />
->>>>>>> dd17e67 (Update frontend parking system UI)
               <div className="relative z-10 max-w-2xl">
                 <h2 className="font-display text-5xl font-semibold leading-tight text-[#6f4b2d]">
                   Simple. Smooth. Accessible.

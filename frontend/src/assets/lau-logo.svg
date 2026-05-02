@@ -1,0 +1,12 @@
+<svg width="640" height="180" viewBox="0 0 640 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="640" height="180" rx="24" fill="white"/>
+  <path d="M43 40C80 20 130 20 170 20C208 20 245 26 280 40V94H43V40Z" fill="#0D7A5B"/>
+  <path d="M116 36C150 34 191 46 214 71C199 93 169 108 133 110C149 95 164 79 164 63C164 51 147 41 116 36Z" fill="white"/>
+  <path d="M93 108C108 95 126 82 139 62" stroke="#0D7A5B" stroke-width="3" stroke-linecap="round"/>
+  <path d="M112 109C126 95 143 83 157 63" stroke="#0D7A5B" stroke-width="3" stroke-linecap="round"/>
+  <path d="M131 109C145 95 161 84 175 65" stroke="#0D7A5B" stroke-width="3" stroke-linecap="round"/>
+  <path d="M176 55C183 59 187 67 187 74" stroke="white" stroke-width="4" stroke-linecap="round"/>
+  <path d="M93 78C111 81 126 75 136 63C136 74 128 84 116 91C104 97 91 99 75 99C82 91 86 84 93 78Z" fill="white"/>
+  <text x="320" y="95" fill="#0D7A5B" font-family="Georgia, serif" font-size="88" font-weight="700">LAU</text>
+  <text x="45" y="145" fill="#0D7A5B" font-family="Arial, sans-serif" font-size="34" font-weight="700">Lebanese American University</text>
+</svg>

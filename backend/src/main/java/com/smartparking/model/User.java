@@ -3,6 +3,8 @@ package com.smartparking.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -44,6 +46,7 @@ public class User {
     @Column(nullable = false)
     private Boolean hasDisability = false;
     
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "JSON")
     private Map<String, Object> preferences; // {near_entrance, proximity_preference, etc.}
     

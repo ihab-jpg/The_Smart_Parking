@@ -4,6 +4,7 @@ export const API_BASE_URL =
 export const API_ENDPOINTS = {
   auth: {
     login: '/api/auth/login',
+    register: '/api/auth/register',
   },
   parking: {
     levels: '/api/parking/levels',

@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.validation.constraints.Null;
-
 /**
  * Authentication Service
  * ======================

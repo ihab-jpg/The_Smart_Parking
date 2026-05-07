@@ -13,6 +13,11 @@ export function AuthProvider({ children }) {
       setSession(response);
       return response;
     },
+    async signUp(details) {
+      const response = await authService.register(details);
+      setSession(response);
+      return response;
+    },
     async signOut() {
       await authService.logout();
       setSession(null);

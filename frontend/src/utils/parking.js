@@ -1,6 +1,11 @@
 import { levelCapacity, parkingLevels } from '../data/mockParkingData';
 
-const REMOVED_SPOT_NUMBERS = new Set([1, 2, 3, 46, 47, 48, 153, 154, 155, 198, 199, 200]);
+export const REMOVED_SPOT_NUMBERS = new Set([1, 2, 3, 46, 47, 48, 153, 154, 155, 198, 199, 200]);
+export const ELEVATOR_SPOT_NUMBERS = new Set([25, 51, 175]);
+export const EXIT_SPOT_NUMBERS_BY_LEVEL = {
+  L1: new Set([193]),
+  L5: new Set([193]),
+};
 
 export const STATUS_STYLES = {
   available: {
@@ -54,8 +59,17 @@ function getSpotNumber(spot) {
   return Number(parts[1]);
 }
 
+function isExitSpot(spot) {
+  return EXIT_SPOT_NUMBERS_BY_LEVEL[spot.level]?.has(getSpotNumber(spot)) || false;
+}
+
 function isVisibleOperationalSpot(spot) {
-  return !REMOVED_SPOT_NUMBERS.has(getSpotNumber(spot));
+  const spotNumber = getSpotNumber(spot);
+  return (
+    !REMOVED_SPOT_NUMBERS.has(spotNumber) &&
+    !ELEVATOR_SPOT_NUMBERS.has(spotNumber) &&
+    !isExitSpot(spot)
+  );
 }
 
 export function buildDashboardMetrics(spots) {
@@ -132,8 +146,20 @@ const ENTRANCE_RANGES = {
 };
 
 const QUICK_EXIT_RULES = {
-  scienceBldg: { level: 'L5', target: 180 },
-  upperGate: { level: 'L1', target: 180 },
+  scienceBldg: {
+    level: 'L5',
+    ranges: [
+      [135, 145],
+      [185, 195],
+    ],
+  },
+  upperGate: {
+    level: 'L1',
+    ranges: [
+      [135, 145],
+      [185, 195],
+    ],
+  },
 };
 
 function sortBySpotNumber(spots) {
@@ -141,17 +167,19 @@ function sortBySpotNumber(spots) {
 }
 
 function filterAvailableOnly(spots) {
-  return spots.filter((spot) => spot.status === 'available');
+  return spots.filter((spot) => isVisibleOperationalSpot(spot) && spot.status === 'available');
 }
 
 function filterNearTarget(spots, target, radius = 12) {
-  return spots.filter((spot) => Math.abs(getSpotNumber(spot) - target) <= radius);
+  return spots.filter(
+    (spot) => isVisibleOperationalSpot(spot) && Math.abs(getSpotNumber(spot) - target) <= radius,
+  );
 }
 
 function filterByRanges(spots, ranges) {
   return spots.filter((spot) => {
     const spotNumber = getSpotNumber(spot);
-    return ranges.some(([start, end]) => spotNumber >= start && spotNumber <= end);
+    return isVisibleOperationalSpot(spot) && ranges.some(([start, end]) => spotNumber >= start && spotNumber <= end);
   });
 }
 
@@ -199,10 +227,10 @@ function hasActiveSpotFilters(filters) {
 
 export function getFilteredSpotIds(spots, level, filters) {
   if (!hasActiveSpotFilters(filters)) {
-    return new Set(spots.map((spot) => spot.id));
+    return new Set(spots.filter(isVisibleOperationalSpot).map((spot) => spot.id));
   }
 
-  let result = [...spots];
+  let result = spots.filter(isVisibleOperationalSpot);
 
   if (filters.availableOnly) {
     result = filterAvailableOnly(result);
@@ -223,7 +251,9 @@ export function getFilteredSpotIds(spots, level, filters) {
       return new Set();
     }
 
-    result = filterNearTarget(result, quickExit.target);
+    result = quickExit.ranges
+      ? filterByRanges(result, quickExit.ranges)
+      : filterNearTarget(result, quickExit.target);
   }
 
   return new Set(sortBySpotNumber(result).map((spot) => spot.id));

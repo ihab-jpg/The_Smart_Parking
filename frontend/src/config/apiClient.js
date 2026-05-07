@@ -1,12 +1,20 @@
 import { API_BASE_URL } from './api';
 
 async function parseResponse(response) {
+  const contentType = response.headers.get('content-type');
+  const isJson = contentType && contentType.includes('application/json');
+
   if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+    if (isJson) {
+      const errorBody = await response.json();
+      throw new Error(errorBody.error || `Request failed with status ${response.status}`);
+    }
+
+    const errorText = await response.text();
+    throw new Error(errorText || `Request failed with status ${response.status}`);
   }
 
-  const contentType = response.headers.get('content-type');
-  if (contentType && contentType.includes('application/json')) {
+  if (isJson) {
     return response.json();
   }
 

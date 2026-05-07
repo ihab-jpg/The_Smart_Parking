@@ -11,6 +11,8 @@ import com.smartparking.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,6 +37,7 @@ public class AuthController {
      * Returns: {user_id, token, message}
      */
     @PostMapping("/register")
+    @Transactional
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             User user = authService.registerUser(request);
@@ -43,9 +46,11 @@ public class AuthController {
                 user.getId(),
                 token,
                 user.getUsername(),
+                user.getFullName(),
                 "User registered successfully"
             ));
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
         }
     }
@@ -65,6 +70,7 @@ public class AuthController {
                 user.getId(),
                 token,
                 user.getUsername(),
+                user.getFullName(),
                 "Login successful"
             ));
         } catch (Exception e) {

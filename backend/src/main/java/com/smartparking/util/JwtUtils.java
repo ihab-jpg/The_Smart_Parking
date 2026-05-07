@@ -19,7 +19,7 @@ import java.util.Map;
 @Component
 public class JwtUtils {
     
-    @Value("${app.auth.secret-key:dev-secret-key-change-in-production}")
+    @Value("${app.auth.secret-key:dev-secret-key-change-in-production-please-replace-this-with-a-secure-64-byte-secret}")
     private String secretKey;
     
     @Value("${app.auth.jwt-expiration-ms:86400000}")

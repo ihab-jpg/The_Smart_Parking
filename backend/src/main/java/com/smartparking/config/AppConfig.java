@@ -132,7 +132,7 @@ public class AppConfig {
     }
 
     public static class Authentication {
-        private String secretKey = "dev-secret-key-change-in-production";
+        private String secretKey = "dev-secret-key-change-in-production-please-replace-this-with-a-secure-64-byte-secret";
         private Long jwtExpirationMs = 86400000L; // 24 hours
         private String sessionTimeout = "24h";
 

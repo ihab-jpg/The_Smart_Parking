@@ -25,7 +25,7 @@ export default function SpotDetailsModal({
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-neutral-500">{spot.level}</p>
             <h3 className="mt-2 font-display text-3xl font-semibold text-neutral-900">
-              Spot {spot.label}
+              Spot {spot.displayLabel || spot.label}
             </h3>
           </div>
           <Badge status={spot.status} />
@@ -50,6 +50,11 @@ export default function SpotDetailsModal({
 {`{
   "id": ${spot.id},
   "label": "${spot.label}",
+  "displayLabel": "${spot.displayLabel || spot.label}",
+  "rowKey": ${spot.rowKey ? `"${spot.rowKey}"` : 'null'},
+  "rowPosition": ${spot.rowPosition ?? 'null'},
+  "slotPosition": ${spot.slotPosition ?? 'null'},
+  "layoutPosition": ${spot.layoutPosition ?? 'null'},
   "level": "${spot.level}",
   "status": "${spot.status}",
   "assignedTo": ${spot.assignedTo ? `"${spot.assignedTo}"` : 'null'},

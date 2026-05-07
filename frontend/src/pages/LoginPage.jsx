@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import beirutFountain from '../assets/beirutFountain.jpg';
 import fountain from '../assets/fountain.jpeg';
@@ -181,6 +182,13 @@ export default function LoginPage() {
                 </p>
               )}
             </form>
+
+            <p className="mt-5 text-center text-sm font-medium text-neutral-600">
+              New to the parking portal?{' '}
+              <Link to="/register" className="font-semibold text-brand-700 hover:text-brand-800">
+                Create an account
+              </Link>
+            </p>
 
             <div className="mt-6">
               <RoleToggleCard onQuickLogin={handleQuickLogin} />

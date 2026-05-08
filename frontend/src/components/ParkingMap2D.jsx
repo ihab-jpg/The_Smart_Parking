@@ -73,7 +73,7 @@ function SpotCell({ spot, isActive, onSpotClick, orientation = 'horizontal' }) {
   const isVertical = orientation === 'vertical';
   const baseSize = isVertical
     ? 'h-[88px] w-8 lg:h-[96px] lg:w-9'
-    : 'h-7 w-[104px] lg:h-8 lg:w-[114px]';
+    : 'h-7 w-[134px] lg:h-8 lg:w-[134px]';
 
   if (!spot) {
     return <div className={`${baseSize} rounded-xl border border-dashed border-neutral-200 bg-white/70`} />;
@@ -130,10 +130,10 @@ function HorizontalCirculationBand({ compact = false }) {
 
 function ConnectedRoadLayer() {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[136px] bottom-[112px] z-0">
+    <div className="pointer-events-none absolute inset-x-0 top-[112px] bottom-[112px] z-0">
       <svg
         className="h-full w-full overflow-visible"
-        viewBox="0 0 920 1180"
+        viewBox="0 0 920 1592"
         preserveAspectRatio="none"
         aria-hidden="true"
       >
@@ -143,7 +143,7 @@ function ConnectedRoadLayer() {
           </filter>
         </defs>
         <path
-          d="M 88 30 H 832 M 241 30 V 1150 M 679 30 V 1150 M 88 1150 H 832"
+          d="M 88 30 H 832 M 241 30 V 1562 M 679 30 V 1562 M 88 1562 H 832"
           fill="none"
           stroke="#ffffff"
           strokeLinecap="round"
@@ -152,7 +152,7 @@ function ConnectedRoadLayer() {
           filter="url(#roadShadow)"
         />
         <path
-          d="M 88 30 H 832 M 241 30 V 1150 M 679 30 V 1150 M 88 1150 H 832"
+          d="M 88 30 H 832 M 241 30 V 1562 M 679 30 V 1562 M 88 1562 H 832"
           fill="none"
           stroke="#d9e7d8"
           strokeLinecap="round"
@@ -161,7 +161,7 @@ function ConnectedRoadLayer() {
           opacity="0.45"
         />
         <path
-          d="M 88 30 H 832 M 241 30 V 1150 M 679 30 V 1150 M 88 1150 H 832"
+          d="M 88 30 H 832 M 241 30 V 1562 M 679 30 V 1562 M 88 1562 H 832"
           fill="none"
           stroke="#ffffff"
           strokeLinecap="round"
@@ -180,7 +180,7 @@ function AisleColumn({ variant = 'drive' }) {
   if (variant === 'divider') {
     return (
       <div className="flex justify-center self-stretch">
-        <div className={`${widthClass} ${radiusClass} relative min-h-[1180px] overflow-hidden bg-transparent`}>
+        <div className={`${widthClass} ${radiusClass} relative min-h-[1592px] overflow-hidden bg-transparent`}>
           <div className={`${radiusClass} absolute inset-0 border-[3px] border-neutral-500/75 shadow-sm`} />
           <div className={`${radiusClass} absolute inset-[6px] border border-white/60`} />
         </div>
@@ -191,7 +191,7 @@ function AisleColumn({ variant = 'drive' }) {
   return (
     <div className="flex justify-center self-stretch">
       <div
-        className={`${widthClass} ${radiusClass} min-h-[1180px] bg-transparent`}
+        className={`${widthClass} ${radiusClass} min-h-[1592px] bg-transparent`}
       />
     </div>
   );
@@ -216,11 +216,12 @@ function VerticalSpotRow({ spots, filteredSpotIds, onSpotClick }) {
 function LaneColumn({ spots, filteredSpotIds, onSpotClick, align }) {
   const justify =
     align === 'start' ? 'items-start' : align === 'end' ? 'items-end' : 'items-center';
+  const visibleSpots = spots.filter(Boolean);
 
   return (
     <div className="relative z-10">
       <div className={`flex flex-col gap-1.5 lg:gap-2 ${justify}`}>
-        {spots.filter(Boolean).map((spot) => (
+        {visibleSpots.map((spot) => (
           <SpotCell
             key={spot.id}
             spot={spot}
@@ -304,7 +305,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
   const occupied = visibleSpots.filter((spot) => spot.status === 'occupied').length;
   const reserved = visibleSpots.filter((spot) => spot.status === 'reserved').length;
   const accessible = visibleSpots.filter((spot) => spot.status === 'suspended').length;
-  const middleGridTemplate = '114px 66px 114px 64px 114px 66px 114px';
+  const middleGridTemplate = '134px 66px 134px 64px 134px 66px 134px';
 
   return (
     <div className="rounded-[30px] border border-neutral-200 bg-gradient-to-b from-[#f8faf7] to-[#f2f5ef] p-4 shadow-soft lg:p-5">
@@ -342,7 +343,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
               <ConnectedRoadLayer />
 
               <div className="relative z-10 mx-auto w-fit">
-                <div className="mt-9 grid grid-cols-[1fr] items-end">
+                <div className="mt-6 grid grid-cols-[1fr] items-end">
                   <div className="flex justify-center">
                     <VerticalSpotRow
                       spots={topRowSpots}
@@ -352,7 +353,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                   </div>
                 </div>
 
-                <div className="mt-7">
+                <div className="mt-7 ">
                   <HorizontalCirculationBand compact />
                 </div>
               </div>

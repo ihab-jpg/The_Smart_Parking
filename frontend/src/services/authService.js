@@ -52,6 +52,24 @@ export async function register(details) {
   };
 }
 
+export async function getProfile(token) {
+  return apiRequest(API_ENDPOINTS.auth.profile, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+export async function updateProfile(token, details) {
+  return apiRequest(API_ENDPOINTS.auth.profile, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(details),
+  });
+}
+
 export async function logout() {
   return true;
 }

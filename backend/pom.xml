@@ -75,20 +75,6 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- Twilio SMS -->
-        <dependency>
-            <groupId>com.twilio.sdk</groupId>
-            <artifactId>twilio</artifactId>
-            <version>9.0.0</version>
-        </dependency>
-
-        <!-- Stripe Payment -->
-        <dependency>
-            <groupId>com.stripe</groupId>
-            <artifactId>stripe-java</artifactId>
-            <version>22.15.0</version>
-        </dependency>
-
         <!-- Lombok for reducing boilerplate -->
         <dependency>
             <groupId>org.projectlombok</groupId>

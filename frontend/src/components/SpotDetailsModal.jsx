@@ -20,7 +20,7 @@ export default function SpotDetailsModal({
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-neutral-900/35 p-4 backdrop-blur-sm">
-      <div className="w-full max-w-2xl rounded-[28px] border border-neutral-200 bg-white p-6 shadow-lift">
+      <div className="max-h-[calc(100vh-2rem)] w-full max-w-2xl overflow-y-auto rounded-[28px] border border-neutral-200 bg-white p-6 shadow-lift">
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-neutral-500">{spot.level}</p>
@@ -44,9 +44,10 @@ export default function SpotDetailsModal({
           </div>
         </div>
 
-        <div className="mt-6 rounded-[24px] border border-neutral-200 p-4">
-          <p className="text-sm font-semibold text-neutral-900">Spring Boot ready DTO</p>
-          <pre className="mt-3 overflow-x-auto rounded-2xl bg-neutral-900 p-4 text-xs text-neutral-100">
+        {role === 'ADMIN' && (
+          <div className="mt-6 rounded-[24px] border border-neutral-200 p-4">
+            <p className="text-sm font-semibold text-neutral-900">Spring Boot ready DTO</p>
+            <pre className="mt-3 overflow-x-auto rounded-2xl bg-neutral-900 p-4 text-xs text-neutral-100">
 {`{
   "id": ${spot.id},
   "label": "${spot.label}",
@@ -60,8 +61,9 @@ export default function SpotDetailsModal({
   "assignedTo": ${spot.assignedTo ? `"${spot.assignedTo}"` : 'null'},
   "type": "${spot.type}"
 }`}
-          </pre>
-        </div>
+            </pre>
+          </div>
+        )}
 
         {role === 'ADMIN' ? (
           <div className="mt-6 space-y-5">
@@ -100,8 +102,8 @@ export default function SpotDetailsModal({
           </div>
         ) : (
           <div className="mt-6 rounded-[24px] bg-brand-50 p-4 text-sm text-brand-900">
-            Users can inspect live spot details here. Admin-only controls remain hidden until
-            the backend role permissions are connected.
+            This spot is currently marked as {getStatusLabel(spot.status).toLowerCase()}.
+            Administrative assignments and internal identifiers are hidden from regular users.
           </div>
         )}
 

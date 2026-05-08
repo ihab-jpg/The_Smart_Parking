@@ -19,12 +19,6 @@ public class AppConfig {
     // Authentication Configuration
     private Authentication auth = new Authentication();
     
-    // Twilio (SMS) Configuration
-    private Twilio twilio = new Twilio();
-    
-    // Payment Gateway Configuration
-    private Payment payment = new Payment();
-    
     // AI Configuration
     private Integer aiDataRefreshInterval = 10; // Seconds between random spot updates
 
@@ -43,22 +37,6 @@ public class AppConfig {
 
     public void setAuth(Authentication auth) {
         this.auth = auth;
-    }
-
-    public Twilio getTwilio() {
-        return twilio;
-    }
-
-    public void setTwilio(Twilio twilio) {
-        this.twilio = twilio;
-    }
-
-    public Payment getPayment() {
-        return payment;
-    }
-
-    public void setPayment(Payment payment) {
-        this.payment = payment;
     }
 
     public Integer getAiDataRefreshInterval() {
@@ -162,56 +140,4 @@ public class AppConfig {
         }
     }
 
-    public static class Twilio {
-        private String accountSid;
-        private String authToken;
-        private String phoneNumber;
-
-        // Getters and Setters
-        public String getAccountSid() {
-            return accountSid;
-        }
-
-        public void setAccountSid(String accountSid) {
-            this.accountSid = accountSid;
-        }
-
-        public String getAuthToken() {
-            return authToken;
-        }
-
-        public void setAuthToken(String authToken) {
-            this.authToken = authToken;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
-        }
-    }
-
-    public static class Payment {
-        private String stripeSecretKey;
-        private String stripePublishableKey;
-
-        // Getters and Setters
-        public String getStripeSecretKey() {
-            return stripeSecretKey;
-        }
-
-        public void setStripeSecretKey(String stripeSecretKey) {
-            this.stripeSecretKey = stripeSecretKey;
-        }
-
-        public String getStripePublishableKey() {
-            return stripePublishableKey;
-        }
-
-        public void setStripePublishableKey(String stripePublishableKey) {
-            this.stripePublishableKey = stripePublishableKey;
-        }
-    }
 }

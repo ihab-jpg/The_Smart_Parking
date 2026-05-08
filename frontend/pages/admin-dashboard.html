@@ -26,7 +26,6 @@
                     <li><a href="#lots" class="menu-item" data-tab="lots">Manage Parking Lots</a></li>
                     <li><a href="#spots" class="menu-item" data-tab="spots">Manage Spots</a></li>
                     <li><a href="#reservations" class="menu-item" data-tab="reservations">Active Reservations</a></li>
-                    <li><a href="#payments" class="menu-item" data-tab="payments">Payments</a></li>
                     <li><a href="#contact-requests" class="menu-item" data-tab="contact-requests">Contact Requests</a></li>
                     <li><a href="#reports" class="menu-item" data-tab="reports">Reports</a></li>
                     <li><a href="#settings" class="menu-item" data-tab="settings">Settings</a></li>
@@ -179,40 +178,6 @@
                     </table>
                 </section>
 
-                <!-- Payments Tab -->
-                <section id="payments-tab" class="tab-content">
-                    <h1>Payment Records</h1>
-                    
-                    <div class="section-controls">
-                        <input type="date" id="payment-date-from" placeholder="From" class="filter-input">
-                        <input type="date" id="payment-date-to" placeholder="To" class="filter-input">
-                        <select id="payment-status-filter" class="filter-select">
-                            <option value="">All Statuses</option>
-                            <option value="completed">Completed</option>
-                            <option value="pending">Pending</option>
-                            <option value="failed">Failed</option>
-                        </select>
-                        <button id="export-payments-btn" class="btn-secondary">Export</button>
-                    </div>
-
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Payment ID</th>
-                                <th>User</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Receipt</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="payments-list">
-                            <!-- TODO: Populate from API /admin/payments -->
-                        </tbody>
-                    </table>
-                </section>
-
                 <!-- Contact Requests Tab -->
                 <section id="contact-requests-tab" class="tab-content">
                     <h1>Accident Contact Facilitation</h1>
@@ -265,19 +230,6 @@
                 <section id="settings-tab" class="tab-content">
                     <h1>Settings</h1>
                     
-                    <div class="settings-group">
-                        <h2>Pricing Configuration</h2>
-                        <form id="pricing-form">
-                            <!-- TODO: Add hourly rate settings per lot -->
-                        </form>
-                    </div>
-
-                    <div class="settings-group">
-                        <h2>SMS Alerts Configuration</h2>
-                        <form id="sms-config-form">
-                            <!-- TODO: Add SMS alert type toggles -->
-                        </form>
-                    </div>
                 </section>
 
             </main>
@@ -329,11 +281,6 @@
         // - Fetch active reservations: GET /admin/reservations
         // - Extend reservation: POST /admin/reservations/<res_id>/extend
         // - Force release: POST /admin/reservations/<res_id>/force-release
-
-        // TODO: Implement payment management
-        // - Fetch payments: GET /admin/payments
-        // - Process refund: POST /admin/payments/<payment_id>/refund
-        // - Export payments
 
         // TODO: Implement contact request facilitation
         // - Fetch contact requests: GET /admin/contact-requests

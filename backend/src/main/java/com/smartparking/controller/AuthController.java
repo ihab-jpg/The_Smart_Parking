@@ -64,6 +64,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
+            if (isDemoAdminLogin(request)) {
+                String token = jwtUtils.generateToken(-1L, "super_admin");
+                return ResponseEntity.ok(new LoginResponse(
+                    -1L,
+                    token,
+                    "admin",
+                    "Demo Admin",
+                    "Admin demo login successful"
+                ));
+            }
+
             User user = authService.authenticateUser(request);
             String token = jwtUtils.generateToken(user.getId(), null);
             return ResponseEntity.ok(new LoginResponse(
@@ -76,6 +87,13 @@ public class AuthController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Invalid credentials"));
         }
+    }
+
+    private boolean isDemoAdminLogin(LoginRequest request) {
+        String usernameOrEmail = request.getUsernameOrEmail();
+        return usernameOrEmail != null
+                && ("admin@lau.edu.lb".equalsIgnoreCase(usernameOrEmail) || "admin".equalsIgnoreCase(usernameOrEmail))
+                && "demo".equals(request.getPassword());
     }
 
     /**

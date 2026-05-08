@@ -5,6 +5,7 @@ import {
   STATUS_STYLES,
   buildMapLanes,
 } from '../utils/parking';
+import { useEffect, useRef, useState } from 'react';
 
 const ROAD_SURFACE =
   'border border-brand-100/80 bg-white shadow-[inset_0_0_10px_rgba(52,78,58,0.08)]';
@@ -69,7 +70,7 @@ function numberRowSpots(spots, level, rowKey, numbering) {
   });
 }
 
-function SpotCell({ spot, isActive, onSpotClick, orientation = 'horizontal' }) {
+function SpotCell({ spot, isActive, isRouteTarget, onSpotClick, orientation = 'horizontal' }) {
   const isVertical = orientation === 'vertical';
   const baseSize = isVertical
     ? 'h-[88px] w-8 lg:h-[96px] lg:w-9'
@@ -82,6 +83,7 @@ function SpotCell({ spot, isActive, onSpotClick, orientation = 'horizontal' }) {
   if (spot.kind === 'facility') {
     return (
       <div
+        id={`parking-spot-${spot.id}`}
         title={spot.displayLabel || spot.label}
         className={`flex ${baseSize} items-center justify-center rounded-xl border border-neutral-200 bg-[linear-gradient(180deg,#f7f8f5_0%,#ecefe8_100%)] px-2 text-[8px] font-bold uppercase tracking-[0.1em] text-neutral-500 shadow-inner lg:text-[9px]`}
       >
@@ -97,6 +99,7 @@ function SpotCell({ spot, isActive, onSpotClick, orientation = 'horizontal' }) {
   if (!isActive) {
     return (
       <div
+        id={`parking-spot-${spot.id}`}
         className={`flex ${baseSize} select-none items-center justify-center rounded-xl border border-neutral-200 border-dashed bg-white px-2 text-[9px] font-bold tracking-[0.12em] text-neutral-300 opacity-85 shadow-sm lg:text-[10px]`}
       >
         <span className={isVertical ? '-rotate-90 whitespace-nowrap' : ''}>
@@ -108,10 +111,15 @@ function SpotCell({ spot, isActive, onSpotClick, orientation = 'horizontal' }) {
 
   return (
     <button
+      id={`parking-spot-${spot.id}`}
       type="button"
       onClick={() => onSpotClick(spot)}
       title={`${spot.displayLabel || spot.label} - ${spot.status}`}
-      className={`flex ${baseSize} items-center justify-center rounded-xl border px-2 text-[9px] font-bold tracking-[0.12em] shadow-sm transition duration-200 lg:text-[10px] ${style.card} hover:-translate-y-px hover:scale-[1.015] hover:shadow-soft`}
+      className={`flex ${baseSize} items-center justify-center rounded-xl border px-2 text-[9px] font-bold tracking-[0.12em] shadow-sm transition duration-200 lg:text-[10px] ${
+        isRouteTarget
+          ? 'border-cyan-500 bg-cyan-100 text-cyan-950 ring-4 ring-cyan-300'
+          : style.card
+      } hover:-translate-y-px hover:scale-[1.015] hover:shadow-soft`}
     >
       <span className={isVertical ? '-rotate-90 whitespace-nowrap' : ''}>
         {spot.displayLabel || spot.label}
@@ -130,7 +138,10 @@ function HorizontalCirculationBand({ compact = false }) {
 
 function ConnectedRoadLayer() {
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[112px] bottom-[112px] z-0">
+    <div
+      id="parking-road-layer"
+      className="pointer-events-none absolute inset-x-0 top-[112px] bottom-[112px] z-0"
+    >
       <svg
         className="h-full w-full overflow-visible"
         viewBox="0 0 920 1592"
@@ -173,6 +184,91 @@ function ConnectedRoadLayer() {
   );
 }
 
+function RouteLayer({ route }) {
+  if (!route) {
+    return null;
+  }
+
+  return (
+    <div className="pointer-events-none absolute inset-0 z-[5]">
+      <svg
+        className="h-full w-full overflow-visible"
+        aria-hidden="true"
+      >
+        <path
+          d={route.path}
+          fill="none"
+          stroke="#0891b2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="12"
+          opacity="0.26"
+        />
+        <path
+          d={route.path}
+          fill="none"
+          stroke="#06b6d4"
+          strokeDasharray="18 14"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="5"
+        />
+        <circle cx={route.start.x} cy={route.start.y} r="13" fill="#0891b2" />
+        <circle cx={route.end.x} cy={route.end.y} r="11" fill="#06b6d4" />
+      </svg>
+    </div>
+  );
+}
+
+function getRoadMetrics(mapRect) {
+  const roadElement = document.getElementById('parking-road-layer');
+
+  if (!roadElement) {
+    return null;
+  }
+
+  const roadRect = roadElement.getBoundingClientRect();
+  const offsetX = roadRect.left - mapRect.left;
+  const offsetY = roadRect.top - mapRect.top;
+  const scaleX = roadRect.width / 920;
+  const scaleY = roadRect.height / 1592;
+
+  return {
+    leftX: offsetX + 241 * scaleX,
+    rightX: offsetX + 679 * scaleX,
+    topY: offsetY + 30 * scaleY,
+    bottomY: offsetY + 1562 * scaleY,
+  };
+}
+
+function getRoadApproachPoint(spot, elementRect, mapRect, road) {
+  const centerX = elementRect.left + elementRect.width / 2 - mapRect.left;
+  const centerY = elementRect.top + elementRect.height / 2 - mapRect.top;
+
+  if (spot.rowKey?.includes('lane-')) {
+    const roadX = Math.abs(centerX - road.leftX) <= Math.abs(centerX - road.rightX)
+      ? road.leftX
+      : road.rightX;
+
+    return {
+      x: roadX,
+      y: centerY,
+    };
+  }
+
+  if (spot.rowKey?.includes('top')) {
+    return {
+      x: centerX,
+      y: road.topY,
+    };
+  }
+
+  return {
+    x: centerX,
+    y: road.bottomY,
+  };
+}
+
 function AisleColumn({ variant = 'drive' }) {
   const radiusClass = 'rounded-[32px]';
   const widthClass = variant === 'divider' ? 'w-[58px] lg:w-[72px]' : AISLE_WIDTH;
@@ -197,7 +293,7 @@ function AisleColumn({ variant = 'drive' }) {
   );
 }
 
-function VerticalSpotRow({ spots, filteredSpotIds, onSpotClick }) {
+function VerticalSpotRow({ spots, filteredSpotIds, onSpotClick, routeTargetSpotId }) {
   return (
     <div className="flex items-end justify-center gap-1.5 lg:gap-2">
       {spots.filter(Boolean).map((spot) => (
@@ -205,6 +301,7 @@ function VerticalSpotRow({ spots, filteredSpotIds, onSpotClick }) {
           key={spot.id}
           spot={spot}
           isActive={filteredSpotIds.has(spot.id)}
+          isRouteTarget={spot.id === routeTargetSpotId}
           onSpotClick={onSpotClick}
           orientation="vertical"
         />
@@ -213,7 +310,7 @@ function VerticalSpotRow({ spots, filteredSpotIds, onSpotClick }) {
   );
 }
 
-function LaneColumn({ spots, filteredSpotIds, onSpotClick, align }) {
+function LaneColumn({ spots, filteredSpotIds, onSpotClick, align, routeTargetSpotId }) {
   const justify =
     align === 'start' ? 'items-start' : align === 'end' ? 'items-end' : 'items-center';
   const visibleSpots = spots.filter(Boolean);
@@ -226,6 +323,7 @@ function LaneColumn({ spots, filteredSpotIds, onSpotClick, align }) {
             key={spot.id}
             spot={spot}
             isActive={filteredSpotIds.has(spot.id)}
+            isRouteTarget={spot.id === routeTargetSpotId}
             onSpotClick={onSpotClick}
           />
         ))}
@@ -242,7 +340,15 @@ function splitLaneSections(lane) {
   };
 }
 
-export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClick }) {
+export default function ParkingMap2D({
+  level,
+  spots,
+  filteredSpotIds,
+  onSpotClick,
+  routeTargetSpotId,
+}) {
+  const mapRef = useRef(null);
+  const [route, setRoute] = useState(null);
   const layoutSpots = spots.map((spot) => {
     const spotNumber = getSpotNumber(spot);
 
@@ -294,6 +400,15 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
     `${level}-bottom`,
     numbering,
   );
+  const numberedSpots = [
+    ...topRowSpots,
+    ...laneSections.flatMap((lane) => lane.middle),
+    ...bottomRowSpots,
+  ].filter(Boolean);
+  const routeTargetSpot = numberedSpots.find((spot) => spot.id === routeTargetSpotId) || null;
+  const entranceSpot = numberedSpots.find(
+    (spot) => spot.kind === 'facility' && spot.label === 'Exit',
+  ) || null;
   const visibleSpots = spots.filter(
     (spot) =>
       !REMOVED_SPOT_NUMBERS.has(getSpotNumber(spot)) &&
@@ -306,6 +421,53 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
   const reserved = visibleSpots.filter((spot) => spot.status === 'reserved').length;
   const accessible = visibleSpots.filter((spot) => spot.status === 'suspended').length;
   const middleGridTemplate = '134px 66px 134px 64px 134px 66px 134px';
+
+  useEffect(() => {
+    if (!routeTargetSpot || !entranceSpot || !mapRef.current) {
+      setRoute(null);
+      return;
+    }
+
+    function measureRoute() {
+      const mapRect = mapRef.current.getBoundingClientRect();
+      const targetElement = document.getElementById(`parking-spot-${routeTargetSpot.id}`);
+      const entranceElement = document.getElementById(`parking-spot-${entranceSpot.id}`);
+
+      if (!targetElement || !entranceElement) {
+        setRoute(null);
+        return;
+      }
+
+      const targetRect = targetElement.getBoundingClientRect();
+      const entranceRect = entranceElement.getBoundingClientRect();
+      const road = getRoadMetrics(mapRect);
+
+      if (!road) {
+        setRoute(null);
+        return;
+      }
+
+      const start = getRoadApproachPoint(entranceSpot, entranceRect, mapRect, road);
+      const end = getRoadApproachPoint(routeTargetSpot, targetRect, mapRect, road);
+      const transferY =
+        routeTargetSpot.rowKey?.includes('top')
+          ? road.topY
+          : road.bottomY;
+
+      setRoute({
+        start,
+        end,
+        path: `M ${start.x} ${start.y} V ${transferY} H ${end.x} V ${end.y}`,
+      });
+    }
+
+    measureRoute();
+    window.addEventListener('resize', measureRoute);
+
+    return () => {
+      window.removeEventListener('resize', measureRoute);
+    };
+  }, [entranceSpot?.id, routeTargetSpot?.id]);
 
   return (
     <div className="rounded-[30px] border border-neutral-200 bg-gradient-to-b from-[#f8faf7] to-[#f2f5ef] p-4 shadow-soft lg:p-5">
@@ -339,8 +501,9 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
       <div className="mt-5 rounded-[30px] border border-neutral-200 bg-white p-4 shadow-soft lg:mt-6 lg:p-5">
         <div className="rounded-[28px] border border-dashed border-brand-200 bg-[linear-gradient(180deg,#fbfdf9_0%,#f7faf5_100%)] p-4 lg:p-5">
           <div className="mx-auto overflow-x-auto">
-            <div className="relative mx-auto w-fit min-w-[920px]">
+            <div ref={mapRef} className="relative mx-auto w-fit min-w-[920px]">
               <ConnectedRoadLayer />
+              <RouteLayer route={route} />
 
               <div className="relative z-10 mx-auto w-fit">
                 <div className="mt-6 grid grid-cols-[1fr] items-end">
@@ -349,6 +512,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                       spots={topRowSpots}
                       filteredSpotIds={filteredSpotIds}
                       onSpotClick={onSpotClick}
+                      routeTargetSpotId={routeTargetSpotId}
                     />
                   </div>
                 </div>
@@ -367,6 +531,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                   filteredSpotIds={filteredSpotIds}
                   onSpotClick={onSpotClick}
                   align="end"
+                  routeTargetSpotId={routeTargetSpotId}
                 />
                 <AisleColumn />
                 <LaneColumn
@@ -374,6 +539,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                   filteredSpotIds={filteredSpotIds}
                   onSpotClick={onSpotClick}
                   align="start"
+                  routeTargetSpotId={routeTargetSpotId}
                 />
                 <AisleColumn variant="divider" />
                 <LaneColumn
@@ -381,6 +547,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                   filteredSpotIds={filteredSpotIds}
                   onSpotClick={onSpotClick}
                   align="start"
+                  routeTargetSpotId={routeTargetSpotId}
                 />
                 <AisleColumn />
                 <LaneColumn
@@ -388,6 +555,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                   filteredSpotIds={filteredSpotIds}
                   onSpotClick={onSpotClick}
                   align="end"
+                  routeTargetSpotId={routeTargetSpotId}
                 />
               </div>
 
@@ -402,6 +570,7 @@ export default function ParkingMap2D({ level, spots, filteredSpotIds, onSpotClic
                       spots={bottomRowSpots}
                       filteredSpotIds={filteredSpotIds}
                       onSpotClick={onSpotClick}
+                      routeTargetSpotId={routeTargetSpotId}
                     />
                   </div>
                 </div>

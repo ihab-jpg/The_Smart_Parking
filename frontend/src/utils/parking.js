@@ -54,9 +54,17 @@ export function groupSpotsByLevel(spots) {
   }, {});
 }
 
-function getSpotNumber(spot) {
+export function getSpotNumber(spot) {
   const parts = spot.label.split('-');
   return Number(parts[1]);
+}
+
+function getLevelPrefix(level) {
+  return String.fromCharCode(64 + Number(level.slice(1)));
+}
+
+function formatSlotLabel(level, slotNumber) {
+  return `${getLevelPrefix(level)}-${String(slotNumber).padStart(3, '0')}`;
 }
 
 function isExitSpot(spot) {
@@ -128,6 +136,132 @@ export function buildMapLanes(spots, laneCount = 4, laneSize = 50) {
     label: `Lane ${index + 1}`,
     spots: normalizedSpots.slice(index * laneSize, index * laneSize + laneSize),
   }));
+}
+
+export function buildLaneAvailability(spots, laneCount = 4, laneSize = 50) {
+  const lanes = buildMapLanes(spots, laneCount, laneSize);
+
+  return lanes.map((lane, index) => {
+    const operationalSpots = lane.spots.filter((spot) => spot && isVisibleOperationalSpot(spot));
+    const availableSpots = operationalSpots.filter((spot) => spot.status === 'available');
+
+    return {
+      id: lane.id,
+      laneNumber: index + 1,
+      spots: operationalSpots,
+      availableSpots,
+      isFull: operationalSpots.length > 0 && availableSpots.length === 0,
+    };
+  });
+}
+
+function getLayoutEntries(spots) {
+  return buildMapLanes(spots).flatMap((lane, laneIndex) =>
+    lane.spots
+      .map((spot, slotIndex) => {
+        if (!spot) {
+          return null;
+        }
+
+        const section = slotIndex < 5 ? 'top' : slotIndex < 45 ? 'middle' : 'bottom';
+        const middleRow = Math.max(0, Math.min(39, slotIndex - 5));
+
+        return {
+          spot,
+          laneNumber: laneIndex + 1,
+          slotIndex,
+          section,
+          middleRow,
+          roadSide: laneIndex < 2 ? 'left' : 'right',
+        };
+      })
+      .filter(Boolean),
+  );
+}
+
+function getTravelScore(entry, exitEntry) {
+  const bottomRoad = 40;
+  const topRoad = -1;
+  const crossRoadCost = entry.roadSide === exitEntry.roadSide ? 0 : 12;
+  const exitRow = exitEntry.section === 'middle' ? exitEntry.middleRow : bottomRoad;
+
+  if (entry.section === 'middle') {
+    return (
+      Math.abs(bottomRoad - exitRow) +
+      crossRoadCost +
+      Math.abs(bottomRoad - entry.middleRow)
+    );
+  }
+
+  if (entry.section === 'bottom') {
+    return Math.abs(bottomRoad - exitRow) + crossRoadCost + 1;
+  }
+
+  return Math.abs(topRoad - exitRow) + crossRoadCost + 1;
+}
+
+export function findClosestAvailableSpot(spots, level) {
+  const lanes = buildLaneAvailability(spots);
+  const entries = getLayoutEntries(spots);
+  const exitEntry = entries.find((entry) => isExitSpot(entry.spot)) || {
+    section: 'middle',
+    middleRow: 37,
+    roadSide: 'right',
+  };
+  const candidates = entries
+    .filter((entry) => isVisibleOperationalSpot(entry.spot) && entry.spot.status === 'available')
+    .map((entry) => ({
+      spot: entry.spot,
+      lane: lanes[entry.laneNumber - 1],
+      distance: getTravelScore(entry, exitEntry),
+    }))
+    .sort((left, right) => left.distance - right.distance || getSpotNumber(left.spot) - getSpotNumber(right.spot));
+
+  return {
+    lanes,
+    referenceSpotNumber: exitEntry.spot ? getSpotNumber(exitEntry.spot) : 193,
+    spot: candidates[0]?.spot || null,
+    lane: candidates[0]?.lane || null,
+  };
+}
+
+export function findNearestLevelWithAvailableSpot(spots, currentLevel, levels = parkingLevels) {
+  const currentLevelNumber = Number(currentLevel.slice(1));
+
+  return levels
+    .filter((level) => level !== currentLevel)
+    .map((level) => {
+      const levelSpots = spots.filter((spot) => spot.level === level);
+      const result = findClosestAvailableSpot(levelSpots, level);
+
+      return {
+        level,
+        levelDistance: Math.abs(Number(level.slice(1)) - currentLevelNumber),
+        ...result,
+      };
+    })
+    .filter((result) => result.spot)
+    .sort((left, right) => left.levelDistance - right.levelDistance || left.level.localeCompare(right.level))[0] || null;
+}
+
+export function getDisplayedSpotLabel(levelSpots, level, targetSpotId) {
+  let layoutPosition = 0;
+
+  for (const spot of levelSpots) {
+    const spotNumber = getSpotNumber(spot);
+
+    if (REMOVED_SPOT_NUMBERS.has(spotNumber)) {
+      continue;
+    }
+
+    layoutPosition += 1;
+
+    if (spot.id === targetSpotId) {
+      return formatSlotLabel(level, layoutPosition);
+    }
+  }
+
+  return null;
 }
 
 const ENTRANCE_RANGES = {

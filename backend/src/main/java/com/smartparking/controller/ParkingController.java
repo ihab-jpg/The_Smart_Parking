@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/parking")
@@ -33,6 +34,7 @@ public class ParkingController {
     );
 
     private final Map<Long, ParkingSpotResponse> spots = new LinkedHashMap<>();
+    private final Random random = new Random();
 
     @PostConstruct
     public void initializeSpots() {
@@ -102,6 +104,44 @@ public class ParkingController {
 
         spots.put(spotId, updatedSpot);
         return Map.of("success", true, "spot", updatedSpot);
+    }
+
+    @PutMapping("/spots/bulk-status")
+    public Map<String, Object> updateBulkSpotStatus(@RequestBody BulkStatusRequest request) {
+        List<ParkingSpotResponse> updatedSpots = spots.values().stream()
+                .map((spot) -> {
+                    if ("suspended".equals(spot.status())) {
+                        return spot;
+                    }
+
+                    String status = resolveBulkStatus(request.mode());
+                    return new ParkingSpotResponse(
+                            spot.id(),
+                            spot.label(),
+                            spot.level(),
+                            status,
+                            "reserved".equals(status) ? spot.assignedTo() : null,
+                            spot.type()
+                    );
+                })
+                .toList();
+
+        spots.clear();
+        updatedSpots.forEach((spot) -> spots.put(spot.id(), spot));
+
+        return Map.of("success", true, "spots", updatedSpots);
+    }
+
+    private String resolveBulkStatus(String mode) {
+        if ("random".equals(mode)) {
+            return random.nextBoolean() ? "available" : "occupied";
+        }
+
+        if ("occupied".equals(mode)) {
+            return "occupied";
+        }
+
+        return "available";
     }
 
     private ParkingSpotResponse getSpotOrThrow(Long spotId) {
@@ -185,5 +225,8 @@ public class ParkingController {
     }
 
     private record AssignSpotRequest(String assignedTo) {
+    }
+
+    private record BulkStatusRequest(String mode) {
     }
 }

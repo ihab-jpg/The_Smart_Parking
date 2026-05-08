@@ -22,3 +22,10 @@ export async function assignSpot(spotId, assignedTo) {
     body: JSON.stringify({ assignedTo }),
   });
 }
+
+export async function updateBulkSpotStatus(mode) {
+  return apiRequest(API_ENDPOINTS.parking.bulkStatus, {
+    method: 'PUT',
+    body: JSON.stringify({ mode }),
+  });
+}
